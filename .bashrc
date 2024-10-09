@@ -57,7 +57,7 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 "\[\e[0;33m\] (%s)")\[\e[0;37m\]$ '
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 "\[\e[0;33m\] (%s)")\[\e[0;37m\]$ '
     # PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
 else
     PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]$(__git_ps1 "\[\e[0;33m\] (%s)")\[\e[0;37m\]$ '
@@ -133,3 +133,23 @@ fi
 unset __conda_setup
 # <<< conda initialize <<<
 
+# environment activation
+function cd() {
+    builtin cd "$@"
+    if [ -f .venv/bin/activate ]; then
+        source .venv/bin/activate
+    elif [ -f venv/bin/activate ]; then
+        source venv/bin/activate
+    fi
+}
+
+function detect_venv() {
+    if [ -f .venv/bin/activate ]; then
+        source .venv/bin/activate
+    elif [ -f venv/bin/activate ]; then
+        source venv/bin/activate
+    fi
+}
+if [ -f .venv/bin/activate ] || [ -f venv/bin/activate ]; then
+    detect_venv
+fi
